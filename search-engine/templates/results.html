@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Pacifico">
+    <link rel="icon" href="http://obj-cache.cloud.ruanbekker.com/favicon.ico">
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <script>
+    $(document).ready(function(){
+        $('.view').bind('click', function() {
+            window.open('/view/'+$(this).attr('id'), '_blank');
+        });
+    });
+
+    $(document).ready(function(){
+       $('.check').change(function(){
+           if($(this).is(':checked')) {
+               var id = $(this).attr('id');
+               $.post("/search/results",{docid:id, checked: true}, true);
+               console.log(id);
+           } else {
+               var id = $(this).attr('id');
+               $.post("/search/results",{docid:id, checked: false}, false)
+           }
+       })
+    })
+</script>
+
+    <title>Search Engine</title>
+
+  </head>
+  <body>
+
+  <div class="container">
+    <div style="background:transparent !important" class="jumbotron">
+      <div style="font-family: 'Times New Roman', cursive;">
+        <p>
+          <center>
+          <font size="8">Search Engine</font>
+          </center>
+        </p>
+      </div>
+    </div>
+
+  <form action="/search/results" method="post" autocomplete="off">
+    <div class="input-group">
+        <fieldset>
+            <input type="text" class="form-control input-lg" name="input" onselectstart="return false" onpaste="return false;" onCopy="return false" onCut="return false" onDrag="return false" onDrop="return false"  placeholder="Search"  autofocus value="{{ search_term }}">
+        </fieldset>
+        <div class="input-group-btn">
+        <button class="btn btn-primary btn-lg" type="submit">
+          <i class="glyphicon glyphicon-search"></i>
+        </button>
+      </div>
+    </div>
+      <br>
+  <br>
+      <table class="table">
+        <thead>
+          <tr>
+              <th>Mark as relevant</th>
+              <th>Date Stamp</th>
+                <th>Title</th>
+                <th>Link</th>
+          </tr>
+        </thead>
+        <tbody>
+            {% for hit in res['hits']['hits'] %}
+                  <tr>
+                      <td>
+                        <fieldset id="checkboxes {{ hit['_id'] }}">
+                            {%  if relevant_ids.__contains__(hit['_id']) %}
+                            <input class="check" type="checkbox" name="relevant" id = "{{ hit['_id'] }}" checked>
+                            {% else %}
+                            <input class="check" type="checkbox" name="relevant" id = "{{ hit['_id'] }}">
+                            {% endif %}
+                        </fieldset>
+                      </td>
+                    <th scope="row">{{ hit['_source']['datetime'] }} </th>
+                    <td>{{ hit['_source']['headline'] }}</td>
+                    <td><button type="button" class="view" id="{{ hit['_id'] }}">View</button></td>
+                  </tr>
+            {% endfor %}
+        </tbody>
+      </table>
+  </form>
+      </div>
+
+  </body>
+
+
+</html>

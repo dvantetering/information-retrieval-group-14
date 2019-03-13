@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Pacifico">
+  <link rel="icon" href="http://obj-cache.cloud.ruanbekker.com/favicon.ico">
+  <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <style>
+        .white-space-pre {
+    white-space: pre-wrap;
+}
+    </style>
+
+  <title>View</title>
+    <script>
+        $(document).ready(function(){
+            $('#textDiv').html(function() {
+                return "{{res['_source']['body']}}";
+            });
+        });
+
+    </script>
+</head>
+<body>
+  <div class="container">
+
+      <center>
+          <font size="8">{{res['_source']['headline']}}</font>
+      </center>
+    <br><br>
+      <div class ="white-space-pre">{{ res['_source']['body'] }}</div>
+      </div>
+  </body>
+</html>
